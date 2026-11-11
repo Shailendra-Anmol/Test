@@ -8,6 +8,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Shailendra ❤️ Anmol — Forever Begins">
 <meta property="og:description" content="With immense joy, we invite you to our wedding celebration — 26 November 2026, TGS Garden, Anjad.">
+<meta property="og:image" content="https://shailendra-anmol.github.io/Invitation/preview.jpg">
+<meta property="og:image:width" content="250">
+<meta property="og:image:height" content="250">
+<meta property="og:image:alt" content="Shailendra &amp; Anmol — wedding invitation">
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#2a0710">
 <link rel="preload" as="image" href="logo-light.webp">
@@ -231,8 +235,13 @@
   #hero::after{content:"";position:absolute;inset:30px;border:1px solid rgba(201,162,74,.22);pointer-events:none;z-index:3}
   canvas#dust{position:absolute;inset:0;width:100%;height:100%;z-index:1}
   .hero-inner{position:relative;z-index:4;max-width:820px}
-  .hero-inner .om{font-family:'Noto Serif Devanagari',serif;font-size:2.2rem;color:var(--gold)}
-  .ganesh{display:block;height:clamp(120px,19vh,170px);width:auto;margin:10px auto 16px;filter:drop-shadow(0 0 16px rgba(244,224,161,.35)) drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+  .hero-inner::before{content:"";position:absolute;left:50%;top:calc(104px - min(380px,104vw) / 2);width:min(380px,104vw);height:min(380px,104vw);margin-left:calc(min(380px,104vw) / -2);
+    z-index:-1;pointer-events:none;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,232,160,.5) 0%,rgba(244,224,161,.24) 28%,rgba(201,162,74,.09) 48%,transparent 68%);
+    animation:glowPulse 4.2s ease-in-out infinite}
+  @keyframes glowPulse{0%,100%{opacity:.72;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+  .hero-inner .om{font-family:'Noto Serif Devanagari',serif;font-size:2.2rem;color:var(--gold);text-shadow:0 0 18px rgba(244,224,161,.75),0 0 40px rgba(201,162,74,.45)}
+  .ganesh{display:block;height:clamp(120px,19vh,170px);width:auto;margin:10px auto 16px;filter:drop-shadow(0 0 20px rgba(244,224,161,.55)) drop-shadow(0 6px 14px rgba(0,0,0,.45))}
   .wed-name{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.5rem,6vw,2.2rem);letter-spacing:.45em;text-indent:.45em;color:var(--gold-hi);margin:6px 0 10px;text-shadow:0 2px 14px rgba(201,162,74,.35)}
   .tagline{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
   .together{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;opacity:.85;margin-bottom:4px}
@@ -631,7 +640,7 @@
     <div class="tagline">( Bound By Purpose )</div>
     <p class="together">Together Forever · November 2026</p>
     <h1 class="names foil"><span class="nm">Shailendra</span> <span class="amp">&amp;</span> <span class="nm"><span class="cap">A</span>nmol</span></h1>
-    <p class="hero-msg">Two souls, one heartbeat —<br>come witness the beginning of forever.</p>
+    <p class="hero-msg">Two souls, one heartbeat<br>come witness the beginning of forever.</p>
     <div class="hero-date"><span>26 NOV 2026</span><span>TGS GARDEN</span></div>
     <div id="countdown" class="count" aria-live="polite"></div>
     <a href="#story" class="btn">Celebrate With Us</a>
@@ -877,11 +886,19 @@ function startNudge(){
   ['touchstart','wheel','keydown','mousedown'].forEach(ev=>addEventListener(ev,stopNudge,{passive:true,once:true}));
   nudgeTimer=setTimeout(nextNudge,3000);
 }
+/* first-page entrance replays when the guest scrolls back up to it */
+let heroReplay=false;
+if('IntersectionObserver' in window)new IntersectionObserver(es=>es.forEach(e=>{
+  if(!heroReplay)return;
+  const b=document.body.classList;
+  if(!e.isIntersecting)b.remove('hero-in');
+  else if(e.intersectionRatio>=.5&&!b.contains('hero-in'))b.add('hero-in');
+}),{threshold:[0,.5]}).observe(document.getElementById('hero'));
 let opened=false;
 function openInvite(){
   if(opened)return;opened=true;
   bgm.play().then(()=>mbtn.classList.add('playing')).catch(armMusic); /* a tap lets phones play sound; if blocked (auto-open) wait for the first tap */
-  const finish=()=>{intro.classList.add('open');document.body.classList.remove('locked','pre');window.scrollTo(0,0);if(window.__dust)window.__dust(true);startNudge()};
+  const finish=()=>{intro.classList.add('open');document.body.classList.remove('locked','pre');window.scrollTo(0,0);if(window.__dust)window.__dust(true);heroReplay=true;startNudge()};
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return}
   const coin=seal.querySelector('.coin');
   if(coin){ /* stop the flip smoothly on the logo side */
@@ -909,8 +926,9 @@ setTimeout(tryAuto,11000);
 
 /* ---- Reveal on scroll ---- */
 const io=new IntersectionObserver(es=>es.forEach(e=>{
-  if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}
-}),{threshold:.14});
+  if(e.isIntersecting&&e.intersectionRatio>=.14)e.target.classList.add('show');
+  else if(!e.isIntersecting)e.target.classList.remove('show');   /* reset when out of view so it plays again */
+}),{threshold:[0,.14]});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ---- Progress bar + nav ---- */
@@ -1008,7 +1026,7 @@ function armMusic(){
     })(p);
     p.classList.add('typed');
   });
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('go');io.unobserve(e.target)}}),{threshold:.35,rootMargin:'0px 0px -8% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>=.35)e.target.classList.add('go');else if(!e.isIntersecting)e.target.classList.remove('go')}),{threshold:[0,.35],rootMargin:'0px 0px -8% 0px'});
   ps.forEach(p=>io.observe(p));
 })();
 
