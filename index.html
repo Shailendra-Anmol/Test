@@ -235,13 +235,12 @@
   #hero::after{content:"";position:absolute;inset:30px;border:1px solid rgba(201,162,74,.22);pointer-events:none;z-index:3}
   canvas#dust{position:absolute;inset:0;width:100%;height:100%;z-index:1}
   .hero-inner{position:relative;z-index:4;max-width:820px}
-  .hero-inner::before{content:"";position:absolute;left:50%;top:calc(104px - min(380px,104vw) / 2);width:min(380px,104vw);height:min(380px,104vw);margin-left:calc(min(380px,104vw) / -2);
-    z-index:-1;pointer-events:none;border-radius:50%;
-    background:radial-gradient(circle,rgba(255,232,160,.5) 0%,rgba(244,224,161,.24) 28%,rgba(201,162,74,.09) 48%,transparent 68%);
-    animation:glowPulse 4.2s ease-in-out infinite}
-  @keyframes glowPulse{0%,100%{opacity:.72;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
-  .hero-inner .om{font-family:'Noto Serif Devanagari',serif;font-size:2.2rem;color:var(--gold);text-shadow:0 0 18px rgba(244,224,161,.75),0 0 40px rgba(201,162,74,.45)}
-  .ganesh{display:block;height:clamp(120px,19vh,170px);width:auto;margin:10px auto 16px;filter:drop-shadow(0 0 20px rgba(244,224,161,.55)) drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+  @keyframes glowPulse{0%,100%{opacity:.65}50%{opacity:1}}
+  .hero-inner .om{font-family:'Noto Serif Devanagari',serif;font-size:2.2rem;color:var(--gold)}
+  .ganesh-glow{position:relative;isolation:isolate;width:fit-content;margin:10px auto 16px}
+  .ganesh-glow::before{content:"";position:absolute;inset:-12% -30%;z-index:-1;pointer-events:none;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(244,224,161,.26) 0%,rgba(244,224,161,.11) 55%,transparent 100%);animation:glowPulse 4.5s ease-in-out infinite}
+  .ganesh{display:block;height:clamp(120px,19vh,170px);width:auto;filter:drop-shadow(0 0 10px rgba(244,224,161,.4)) drop-shadow(0 6px 14px rgba(0,0,0,.45))}
   .wed-name{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.5rem,6vw,2.2rem);letter-spacing:.45em;text-indent:.45em;color:var(--gold-hi);margin:6px 0 10px;text-shadow:0 2px 14px rgba(201,162,74,.35)}
   .tagline{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
   .together{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;opacity:.85;margin-bottom:4px}
@@ -519,7 +518,8 @@
     .who h3{font-size:calc(var(--arch-w) * .2)}
     .who > span{letter-spacing:.3em}
     #hero{padding:36px 18px 120px}
-    .ganesh{height:clamp(92px,13.5vh,130px);margin:2px auto 8px}
+    .ganesh{height:clamp(92px,13.5vh,130px)}
+    .ganesh-glow{margin:2px auto 8px}
     .hero-inner .om{font-size:1.9rem;line-height:1.15}
     .hero-msg{margin:12px 0 4px}
     .count{margin:4px 0 34px}
@@ -635,7 +635,7 @@
   <div class="hero-glow"></div>
   <div class="hero-inner">
     <div class="om">ॐ</div>
-    <img class="ganesh" alt="Lord Ganesha" src="ganesha.webp">
+    <div class="ganesh-glow"><img class="ganesh" alt="Lord Ganesha" src="ganesha.webp"></div>
     <div class="wed-name"># A N S H</div>
     <div class="tagline">( Bound By Purpose )</div>
     <p class="together">Together Forever · November 2026</p>
